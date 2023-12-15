@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "[ INFO ]: Starting husky hook, to run migrations update."
+
+DEFAULT_MIG_NAME=by-husky
+FILE=.env
+
+if [ -f "$FILE" ]; then
+  # read db credentials from .env file
+  USER=$(cat .env | grep USER | cut -d "=" -f 2)
+  PASS=$(cat .env | grep PASSWORD | cut -d "=" -f 2)
+  PORT=$(cat .env | grep PORT | cut -d "=" -f 2)
+  NAME=$(cat .env | grep NAME | cut -d "=" -f 2)
+else 
+  echo "\"$FILE\" NOT found."
+  exit 2
+fi
+
+# Migration run
+atlas migrate diff $DEFAULT_MIG_NAME \
+  --dir "file://database/migrations" \
+  --to "postgres://$USER:$PASS@localhost:$PORT/$NAME?search_path=public&sslmode=disable" \
+  --dev-url "docker://postgres/14/$NAME" \
+  --format '{{ sql . "  " }}'
+
+git add ./database
+
+echo "[  OK  ]: Husky hook, to update migrations, SUCCESS."

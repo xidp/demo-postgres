@@ -1,0 +1,16 @@
+site_name: demo-postgres
+site_description: 'Main documentation for demo-postgres project'
+repo_url: https://github.com/xidp/demo-postgres.git
+edit_uri: edit/master/docs
+
+# plugins:
+#   - techdocs-core
+
+# For sidebar navigation
+nav:
+  - index.md
+  - Overview:
+      - What is demo-postgres?: 'overview/what-is-demo-postgres.md'
+      - Project Roadmap: 'overview/roadmap.md'
+  - Getting Started:
+      - Getting Started: 'index.md'

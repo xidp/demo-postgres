@@ -1,0 +1,50 @@
+# options:
+# postgres:15-alpine --> not available from crossplane/azure flex server
+# postgres:14-alpine
+---
+version: '3.8'
+services:
+  db:
+    restart: always
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: demo-postgres_db
+    ports:
+      - '${DB_PORT}:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+      # # any *.sql files inside this dir, will be executed on db creation
+      # - ./db/init-scripts:/docker-entrypoint-initdb.d
+volumes:
+  db:
+    driver: local
+
+
+
+# ---
+# version: '3.8'
+# services:
+#
+#   db:
+#     restart: always
+#
+#     # ------------------------------------------------------- pg
+#     image: postgres:14-alpine
+#     environment:
+#       POSTGRES_USER: $DB_USER
+#       POSTGRES_PASSWORD: $DB_PASSWORD
+#       POSTGRES_DB: demo-postgres_db
+#     ports:
+#       - '5432:5432'
+#     volumes: 
+#       - db:/var/lib/postgresql/data
+#       # # any *.sql files inside this dir, will be executed on db creation
+#       # - ./db/init-scripts:/docker-entrypoint-initdb.d
+#     # ------------------------------------------------------- end pg
+#     
+# volumes:
+#   db:
+#     driver: local
+

@@ -1,0 +1,44 @@
+name: Update Database Migrations
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main']
+    paths:
+      - 'database/**'
+  # pull_request:
+  #   branches: ['main']
+
+jobs:
+  # ------------------------------------------ j1
+  update-db-migrations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          repository: xidp/demo-postgres
+          token: ${{ secrets.IDP_TOKEN }}
+
+      - uses: azure/setup-kubectl@v3
+        id: install-kubectl
+
+      - name: Generate Migration ConfigMap
+        run: |
+          kubectl create configmap migrations-cm \
+          --from-file="database/migrations" -o yaml \
+          --dry-run=client --save-config="false" > database/atlas-migrations-cm.yaml
+
+
+      - name: ush ConfigMap to deployment repo
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.IDP_TOKEN }}
+        with:
+          source_file: 'database/atlas-migrations-cm.yaml'
+          destination_repo: 'xidp/demo-postgres_deployment'
+          destination_folder: "k8s-infra/overlays/dev"
+          user_email: "actions@github.com"
+          user_name: 'CD Action'
+          commit_message: ":robot: cd(db): update database migration files"
+

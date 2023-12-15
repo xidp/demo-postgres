@@ -1,0 +1,57 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "demo-postgres",
+    "description": "A standard rest api with NestJS",
+    "version": "0.1.0",
+    "license": {
+      "name": "Private"
+    },
+    "consumes": ["application/json"],
+    "produces": ["application/json"]
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000",
+      "description": "local dev server"
+    },
+    {
+      "url": "https://demo-postgres-dev.127.0.0.1.nip.io",
+      "description": "dev server"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["/"],
+        "summary": "Demo endpoint",
+        "description": "Demo endpoint",
+        "operationId": "showDemo",
+        "responses": {
+          "200": {
+            "description": "Demo message",
+            "content": {
+              "json": {}
+            }
+          }
+        }
+      }
+    },
+    "/docs": {
+      "get": {
+        "tags": ["/docs"],
+        "summary": "API documentation",
+        "description": "Swagger Styled API Documentation",
+        "operationId": "showDocs",
+        "responses": {
+          "200": {
+            "description": "The docs page",
+            "content": {
+              "text/html": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

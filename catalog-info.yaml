@@ -1,0 +1,91 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-postgres
+  # namespace: default
+  description: A standard rest api with NestJS
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: xidp/demo-postgres
+  tags: ['service', 'nestjs', 'api', 'rest']
+  links:
+    - url: http://bs.127.0.0.1.nip.io/catalog/default/template/ai-starter-template-nextjs
+      title: Source Template
+      icon: docs
+    - url: https://github.com/xidp/demo-postgres.git
+      title: Project Source Code Repository
+      icon: github
+    - url: https://github.com/xidp/demo-postgres_deployment.git
+      title: Project Deployment Repository
+      icon: github
+    - url: https://demo-postgres-dev.127.0.0.1.nip.io
+      title: Project Website
+      icon: website
+    - url: https://argocd.127.0.0.1.nip.io/applications/argocd/demo-postgres-dev?view=tree&resource=
+      title: ArgoCD Dashboard
+      icon: dashboard
+      
+spec:
+  type: service
+  lifecycle: experimental # REQUIRED, usually = production | experimental | deprecated
+  owner: group:default/idp_training
+  providesApis:
+    - demo-postgres-api
+  dependsOn:
+    - resource:default/demo-postgres-dev-db
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: demo-postgres-api
+  description: A standard rest api with NestJS
+  annotations:
+    github.com/project-slug: xidp/demo-postgres
+  tags: ['api', 'rest']
+  links:
+    - url: http://bs.127.0.0.1.nip.io/catalog/default/template/nest-js-api
+      title: Source Template
+      icon: docs
+    - url: https://github.com/xidp/demo-postgres.git
+      title: Project Source Code Repository
+      icon: github
+    - url: https://github.com/xidp/demo-postgres_deployment.git
+      title: Project Deployment Repository
+      icon: github
+    - url: https://demo-postgres-dev.127.0.0.1.nip.io
+      title: Project Website
+      icon: website
+    - title: ArgoCD Dashboard
+      icon: dashboard
+      url: https://argocd.127.0.0.1.nip.io/applications/argocd/demo-postgres-dev?view=tree&resource=
+spec:
+  type: openapi
+  lifecycle: experimental # REQUIRED, usually = production | experimental | deprecated
+  owner: group:default/idp_training
+  definition:
+    $text: ./openapi/specs.json
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: demo-postgres-dev-db
+  description: A database to store demo-postgres project data
+  annotations:
+    github.com/project-slug: xidp/demo-postgres
+  tags: ['resource', 'database', 'sql', 'postgres'] # type, lang, framework
+  # links:
+  #   - title: Database host address
+  #     url: https://demo-postgres-dev-at-xgeeksflexserver.postgres.database.azure.com
+  #     icon: website
+spec:
+  type: database
+  owner: idp_training
+  lifecycle: experimental
+  dependencyOf:
+    - component:default/demo-postgres
+  # system: parent-system-entity-ref # sos TODO
+  # dependsOn:
+  #   - 'abc'
+  #   - 'cde'
