@@ -7,7 +7,7 @@ metadata:
   annotations:
     backstage.io/techdocs-ref: dir:.
     github.com/project-slug: xidp/demo-postgres
-    sentry.io/project-slug: xidp/demo-postgres
+    sentry.io/project-slug: sousa/javascript-vue
   tags: ['service', 'nestjs', 'api', 'rest']
   links:
     - url: http://bs.127.0.0.1.nip.io/catalog/default/template/ai-starter-template-nextjs
